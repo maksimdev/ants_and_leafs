@@ -26,7 +26,8 @@ export default class Ant {
 
   findLeaf() {
     if (!window.GAME.leafs.length) {
-      this.velocity = new Vector(0, 0);
+      this.brain.popState();
+      this.brain.pushState(this.goHome.bind(this));
 
       return;
     }
@@ -48,10 +49,8 @@ export default class Ant {
     this.velocity = this.target.position.subtract(this.position);
 
     if (this.target.position.subtract(this.position).length() < 1) {
-      window.GAME.leafs = window.GAME.leafs.filter(item => item.id !== this.target.id);
-
-      // Муравей только что подобрал листок, время
-      // возвращаться домой!
+      this.target.takeLeaf(this.home);
+      this.target.destroy('leafs');
       this.brain.pushState(this.goHome.bind(this));
     }
     // if (distance(GAME.leaf, this) <= 10) {
@@ -73,8 +72,7 @@ export default class Ant {
     this.velocity = this.position.subtract(this.home.position).negate();
 
     if (this.position.subtract(this.home.position).length() < 1) {
-      // Муравей только что подобрал листок, время
-      // возвращаться домой!
+      this.target.destroy('reservedLeafs');
       this.brain.popState();
     }
   }

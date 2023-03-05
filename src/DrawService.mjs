@@ -1,6 +1,8 @@
 export default class DrawService {
-  constructor() {
+  constructor(width, height) {
     this.canvas = document.getElementById('canvas');
+    this.canvas.width = width;
+    this.canvas.height = height;
     this.ctx = canvas.getContext("2d");
     this.ctx.fillStyle = "grey";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -31,10 +33,15 @@ export default class DrawService {
     window.GAME.leafs.forEach(leaf => this.draw(leaf.position.x, leaf.position.y, 5, "green"));
   }
 
+  drawReservedLeafs() {
+    window.GAME.reservedLeafs.forEach(leaf => this.draw(leaf.position.x, leaf.position.y, 5, "green"));
+  }
+
   drawFrame() {
     this.clearCanvas();
     this.drawHomes();
-    this.drawAnts();
     this.drawLeafs();
+    this.drawReservedLeafs();
+    this.drawAnts();
   }
 }

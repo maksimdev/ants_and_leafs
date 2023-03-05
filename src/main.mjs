@@ -4,49 +4,57 @@ import Leaf from './Leaf.mjs';
 import DrawService from './DrawService.mjs';
 import UserController from './UserController.mjs';
 
-const drawService = new DrawService();
+const config = {
+  height: 1000, //1000
+  width: 1900, //1900
+  homeAmount: 10,
+  antsPerHome: 10,
+  leafAmount: 200
+};
+
+const generateGameConfig = ({ homeAmount, antsPerHome, leafAmount }) => {
+  const ants = [];
+  const homes = (new Array(homeAmount)).fill(null).map(
+    () => new Home(Math.floor(Math.random() * config.width) + 1, Math.floor(Math.random() * config.height) + 1)
+  );
+
+  homes.forEach(home => {
+    (new Array(antsPerHome))
+      .fill(null)
+      .map(() => new Ant(home.position.x, home.position.y, home))
+      .forEach(ant => ants.push(ant));
+  });
+
+  const leafs = (new Array(leafAmount)).fill(null).map(
+    () => new Leaf(Math.floor(Math.random() * config.width) + 1, Math.floor(Math.random() * config.height) + 1)
+  );
+
+  return {
+    homes,
+    ants,
+    leafs
+  }
+};
+
+const drawService = new DrawService(config.width, config.height);
 const userController = new UserController();
 userController.init();
 
-const home1 = new Home(10, 10);
-const home2 = new Home(500, 500);
-
-const ant11 = new Ant(home1.position.x, home1.position.y, home1);
-const ant12 = new Ant(home1.position.x, home1.position.y, home1);
-const ant13 = new Ant(home1.position.x, home1.position.y, home1);
-
-const ant21 = new Ant(home2.position.x, home2.position.y, home2);
-const ant22 = new Ant(home2.position.x, home2.position.y, home2);
+const gameConfig = generateGameConfig(config);
 
 window.GAME = {
-  homes: [
-    home1,
-    home2
-  ],
-  ants: [
-    ant11,
-    ant12,
-    ant13,
-    ant21,
-    ant22
-  ],
-  leafs: [
-    new Leaf(150, 150),
-    new Leaf(200, 200),
-    new Leaf(300, 100),
-    new Leaf(400, 50),
-    new Leaf(120, 10),
-    new Leaf(700, 120),
-    new Leaf(80, 680),
-    new Leaf(900, 100)
-  ]
+  homes: gameConfig.homes,
+  ants: gameConfig.ants,
+  leafs: gameConfig.leafs,
+  reservedLeafs: []
 };
 
 const gameFrame = () => {
   drawService.drawFrame();
   window.GAME.ants.forEach(ant => ant.update());
+  window.GAME.reservedLeafs.forEach(reservedLeaf => reservedLeaf.update());
 
-  if (!window.GAME.leafs.length) clearTimeout(animation)
+  // if (!window.GAME.leafs.length) clearTimeout(animation)
 };
 
 const animation = setInterval(gameFrame, 60);

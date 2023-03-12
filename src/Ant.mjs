@@ -44,8 +44,6 @@ export default class Ant {
     };
 
     setTarget(window.GAME.leafs);
-
-    // Перемещает муравья к листу.
     this.velocity = this.target.position.subtract(this.position);
 
     if (this.target.position.subtract(this.position).length() < 1) {
@@ -53,19 +51,6 @@ export default class Ant {
       this.target.destroy('leafs');
       this.brain.pushState(this.goHome.bind(this));
     }
-    // if (distance(GAME.leaf, this) <= 10) {
-        // Муравей только что подобрал листок, время
-        // возвращаться домой!
-    //     //brain.setState(goHome);
-
-    //     this.brain.setState(this.stop)
-    // }
-
-    // if (distance(Game.mouse, this) <= MOUSE_THREAT_RADIUS) {
-    //     // Курсор мыши находится рядом. Бежим!
-    //     // Меняем состояние автомата на runAway()
-    //     brain.setState(runAway);
-    // }
   }
 
   goHome() {
@@ -76,10 +61,6 @@ export default class Ant {
       this.brain.popState();
     }
   }
-
-  //runAway() {}
-
-  stop() {}
 
   update() {
     if (!this.brain.getCurrentState()) this.brain.pushState(this.findLeaf.bind(this));

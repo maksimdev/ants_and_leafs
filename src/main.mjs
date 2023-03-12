@@ -5,11 +5,11 @@ import DrawService from './DrawService.mjs';
 import UserController from './UserController.mjs';
 
 const config = {
-  height: 1000, //1000
-  width: 1900, //1900
-  homeAmount: 10,
-  antsPerHome: 10,
-  leafAmount: 200
+  height: 1000,
+  width: 1900,
+  homeAmount: 5,
+  antsPerHome: 200,
+  leafAmount: 2000
 };
 
 const generateGameConfig = ({ homeAmount, antsPerHome, leafAmount }) => {
@@ -38,6 +38,7 @@ const generateGameConfig = ({ homeAmount, antsPerHome, leafAmount }) => {
 
 const drawService = new DrawService(config.width, config.height);
 const userController = new UserController();
+
 userController.init();
 
 const gameConfig = generateGameConfig(config);
@@ -54,10 +55,9 @@ const gameFrame = () => {
   window.GAME.ants.forEach(ant => ant.update());
   window.GAME.reservedLeafs.forEach(reservedLeaf => reservedLeaf.update());
 
-  // if (!window.GAME.leafs.length) clearTimeout(animation)
+  requestAnimationFrame(gameFrame)
 };
 
-const animation = setInterval(gameFrame, 60);
-// setTimeout(() => clearTimeout(animation), 100000);
+gameFrame();
 
 

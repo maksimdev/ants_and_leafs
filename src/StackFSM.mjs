@@ -5,10 +5,7 @@ export default class StackFSM {
 
   update() {
     const currentStateFunction = this.getCurrentState();
-
-    if (currentStateFunction != null) {
-        currentStateFunction();
-    }
+    if (currentStateFunction != null) currentStateFunction();
   }
 
   popState() {

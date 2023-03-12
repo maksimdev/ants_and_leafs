@@ -6,7 +6,7 @@ const toRadians = degrees => (degrees * Math.PI) / 180;
 
 export default class Vector {
   constructor(...components) {
-    this.components = components
+    this.components = components;
   }
   get x() {
     return this.components[0];
@@ -15,44 +15,40 @@ export default class Vector {
     return this.components[1];
   }
   add({ components }) {
-    const n = components.map((component, index) => {
-      const z = this.components[index] + component;
-      return z;
-    });
     return new Vector(
-      ...n
-    )
+      ...components.map((component, index) => this.components[index] + component)
+    );
   }
   subtract({ components }) {
     return new Vector(
       ...components.map((component, index) => this.components[index] - component)
-    )
+    );
   }
   scaleBy(number) {
     return new Vector(
       ...this.components.map(component => component * number)
-    )
+    );
   }
   length() {
-    return Math.hypot(...this.components)
+    return Math.hypot(...this.components);
   }
   dotProduct({ components }) {
-    return components.reduce((acc, component, index) => acc + component * this.components[index], 0)
+    return components.reduce((acc, component, index) => acc + component * this.components[index], 0);
   }
   normalize() {
-    return this.scaleBy(1 / this.length())
+    return this.scaleBy(1 / this.length());
   }
   haveSameDirectionWith(other) {
-    const dotProduct = this.normalize().dotProduct(other.normalize())
-    return areEqual(dotProduct, 1)
+    const dotProduct = this.normalize().dotProduct(other.normalize());
+    return areEqual(dotProduct, 1);
   }
   haveOppositeDirectionTo(other) {
-    const dotProduct = this.normalize().dotProduct(other.normalize())
-    return areEqual(dotProduct, -1)
+    const dotProduct = this.normalize().dotProduct(other.normalize());
+    return areEqual(dotProduct, -1);
   }
   isPerpendicularTo(other) {
-    const dotProduct = this.normalize().dotProduct(other.normalize())
-    return areEqual(dotProduct, 0)
+    const dotProduct = this.normalize().dotProduct(other.normalize());
+    return areEqual(dotProduct, 0);
   }
   angleBetween(other) {
     return toDegrees(
@@ -60,19 +56,19 @@ export default class Vector {
         this.dotProduct(other) /
         (this.length() * other.length())
       )
-    )
+    );
   }
   negate() {
-    return this.scaleBy(-1)
+    return this.scaleBy(-1);
   }
   projectOn(other) {
-    const normalized = other.normalize()
-    return normalized.scaleBy(this.dotProduct(normalized))
+    const normalized = other.normalize();
+    return normalized.scaleBy(this.dotProduct(normalized));
   }
   withLength(newLength) {
-    return this.normalize().scaleBy(newLength)
+    return this.normalize().scaleBy(newLength);
   }
   equalTo({ components }) {
-    return components.every((component, index) => areEqual(component, this.components[index]))
+    return components.every((component, index) => areEqual(component, this.components[index]));
   }
 }
